@@ -4,14 +4,13 @@ This action wraps the Slack [chat.postMessage](https://api.slack.com/methods/cha
 
 ## Usage:
 
-```workflow
-action "Post message to Slack" {
-  uses = "pullreminders/slack-action@master"
-  secrets = [
-    "SLACK_BOT_TOKEN",
-  ]
-  args = "{\"channel\":\"C1234567890\",\"text\":"Hello world"}"
-}
+```yaml
+- name: Notify slack
+  env:
+    SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+  uses: pullreminders/slack-action@master
+  with:
+    args: '{\"channel\":\"C1234567890\",\"text\":\"Hello world\"}'
 ```
 
 Here's what the Slack message would look like:
@@ -27,7 +26,7 @@ To use this GitHub Action you'll first need to create a Slack App and install it
 1. **Create a Slack App**. Go to [Slack's developer site](https://api.slack.com/apps) then click "Create an app". Name the app "GitHub Action" (you can change this later) and make sure your team's Slack workspace is selected under "Development Slack Workspace" ([see screenshot](docs/images/slack-app.png)).
 2. **Add a Bot user**. Browse to the "Bot users" page listed in the sidebar. Name your bot "GitHub Action" (you can change this later) and leave the other default settings as-is ([see screenshot](docs/images/bot-user.png)).
 3. **Set an icon for your bot.** Browse to the "Basic information" page listed in the sidebar. Scroll down to the section titled "Display information" to set an icon. Feel free to use one of the [icons in this repository](docs/app-icons).
-4. **Install your app to your workspace.** At the top of the "Basic information" page you can find a section titled "Install your app to your workspace". Click on it, then use the button to complete the installation ([see screenshot](docs/images/install-slack-all.png)).
+4. **Install your app to your workspace.** At the top of the "Basic information" page you can find a section titled "Install your app to your workspace". Click on it, then use the button to complete the installation ([see screenshot](docs/images/install-slack-app.png)).
 
 ## Using the action
 
@@ -37,14 +36,13 @@ To use this GitHub Action, you'll need to set a `SLACK_BOT_TOKEN` secret on GitH
 
 Slack's [chat.postMessage](https://api.slack.com/methods/chat.postMessage) method accepts a JSON payload containing options — this JSON payload should be supplied as the argument in your GitHub Action. At a bare minimum, your payload must include a channel ID and the message. Here's what a basic message might look like:
 
-```workflow
-action "Post message to Slack" {
-  uses = "pullreminders/slack-github-action@master"
-  secrets = [
-    "SLACK_BOT_TOKEN",
-  ]
-  args = "{\"channel\":\"C1234567890\",\"text\":"Hello world"}"
-}
+```yaml
+- name: Notify slack
+  env:
+    SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+  uses: pullreminders/slack-action@master
+  with:
+    args: '{\"channel\":\"C1234567890\",\"text\":\"Hello world\"}'
 ```
 
 Please note that if you are using the visual editor you should not escape quotes because GitHub will automatically escape them for you.
@@ -60,6 +58,8 @@ https://myworkspace.slack.com/messages/CHANNEL_ID/
 ```
 
 You can also find channel IDs using the Slack API. Get a list of channels that your bot is a member of via Slack's [users.conversations](https://api.slack.com/methods/users.conversations) endpoint. Get user IDs for direct messages using Slack's [users.lookupByEmail](https://api.slack.com/methods/users.lookupByEmail) endpoint
+
+If the channel is private, you'll need to install the App in that channel.
 
 #### Formatting messages
 
